@@ -367,6 +367,49 @@ async def rps(ctx, member: discord.Member):
   if response1=="s" and response2=="s":
     await ctx.send(f" {ctx.author.mention} and {member.mention} TIED!!!")
 
+
+
+#TicTacToe
+@bot.command()
+async def ttt(ctx, p2: discord.Member):
+  # Global variables
+  global tileChosen
+  global count
+  global player1
+  global player2
+  global turn
+  global gameOver
+
+  # Coordinates for Tiles
+  global tile1
+  global tile2
+  global tile3
+  global tile4
+  global tile5
+  global tile6
+  global tile7
+  global tile8
+  global tile9
+
+  tile1=(4,4)
+  tile2=(108,4)
+  tile3=(215,4)
+  tile4=(4,108)
+  tile5=(108,108)
+  tile6=(215,108)
+  tile7=(4,215)
+  tile8=(108,215)
+  tile9=(215,215)
+  tileChosen=None
+
+  #  Defaults Init
+  p1 = ctx.author
+  player1 = p1
+  player2 = p2
+  squaresTaken=0
+  squaresTakenList=[]
+  winner=None
+
 #ADDONS ---------------------------------------------
 @bot.command()
 async def whatisreannesfavlabelslashsinger(ctx):
