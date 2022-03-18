@@ -410,6 +410,89 @@ async def ttt(ctx, p2: discord.Member):
   squaresTakenList=[]
   winner=None
 
+# Game Grid Embed 
+  async def tttGrid(tileChosen):
+    embed = discord.Embed(title="TicTacToe | Simmy Bot", description=f"Here is your grid:", color = 0x709198)
+    embed.set_footer(text=f"Game initiated by<@" + str(player1.id) + ">")
+    tttBase = Image.open ("TicTacToe/defaultGridTTT.jpg")
+    tttBase = tttBase.convert("RGBA")
+    tttX = Image.open('TicTacToe/x.png')
+    tttX = tttX.convert("RGBA")
+    back_im = tttBase.copy()  
+    back_im.paste(tttX, (tileChosen), tttX)
+    back_im.save('TicTacToe/tttGameCompiled.png', quality=95)
+    embed.set_image(url="attachment://TicTacToe/tttGameCompiled.png")
+    file = discord.File("TicTacToe/tttGameCompiled.png", filename="tttGameCompiled.png")
+    embed.set_image(url="attachment://tttGameCompiled.png")
+    await ctx.send(file=file, embed=embed)
+  
+# Game Start 
+  await ctx.send("Initiated TicTacToe")
+  num = random.randint(1, 2)
+  while squaresTaken<9 and winner==None:
+    if num == 1:
+      turn = player1
+      await ctx.send("It is <@" + str(player1.id) + ">'s turn. Please choose a tile")
+      player1TTTResponse = await bot.wait_for('message')
+      if (player1TTTResponse.content)=="tile1":
+        tileChosen=tile1
+        squaresTaken+=1
+        squaresTakenList.append(player1TTTResponse.content)
+        squaresTakenList.sort()
+        await (tttGrid(tileChosen))
+      elif (player1TTTResponse.content)=="tile2":
+        tileChosen=tile2
+        squaresTaken+=1
+        squaresTakenList.append(player1TTTResponse.content)
+        squaresTakenList.sort()
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile3":
+        tileChosen=tile3
+        squaresTaken+=1
+        squaresTakenList.append(player1TTTResponse.content)
+        squaresTakenList.sort()
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile4":
+        tileChosen=tile4
+        squaresTaken+=1
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile5":
+        tileChosen=tile5
+        squaresTaken+=1
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile6":
+        tileChosen=tile6
+        squaresTaken+=1
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile7":
+        tileChosen=tile7
+        squaresTaken+=1
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile8":
+        tileChosen=tile8
+        squaresTaken+=1
+        await tttGrid(tileChosen)
+      elif (player1TTTResponse.content)=="tile9":
+        tileChosen=tile9
+        squaresTaken+=1
+        await tttGrid(tileChosen)
+      else:
+        TimeoutError(10)
+        await ctx.send("Timed out, Players took too long to respond")
+      await ctx.send("Player 1 chose: " + (player1TTTResponse.content))
+    if squaresTakenList in tttWinScenarios:
+      await ctx.send("YOU WONNNNNN")
+    elif num == 2:
+      turn = player2
+      await ctx.send("It is <@" + str(player2.id) + ">'s turn. Please choose a tile")
+  else:
+    await ctx.send("Game Ended. _____ Won")
+
+
+
+
+
+
 #ADDONS ---------------------------------------------
 @bot.command()
 async def whatisreannesfavlabelslashsinger(ctx):
