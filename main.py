@@ -103,6 +103,22 @@ async def goodbye(ctx):
         json.dump(goodbye, f, indent=4)
         await ctx.send(f'Goodbye Channel Set!')
 
+# PREFIX RESET COMMAND (CONSTANT COMMAND DOES NOT CHANGE WITH PREFIX)
+@bot.listen()
+async def on_message(message):
+    guild= message.guild.id
+    if message.content.startswith("s-resetprefix"):
+      with open ("prefixes.json", "r") as f:
+        prefixes=json.load(f)
+        prefixes.pop(str(guild))
+      prefixes[str(guild)] = "s-"
+      with open ("prefixes.json", "w") as f:
+        json.dump (prefixes, f, indent=4)
+      await message.channel.send("Reset prefix to s-")
+
+
+
+
 #BOT READY---------------------------------------------
 @bot.event
 async def on_ready():
