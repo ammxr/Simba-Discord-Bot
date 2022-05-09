@@ -442,6 +442,36 @@ async def ttt(ctx, p2: discord.Member):
     embed.set_image(url="attachment://tttGameCompiled.png")
     await ctx.send(file=file, embed=embed)
   
+  
+ 
+# TTT Check Win Condition (Incomplete) 
+def checkSubset(list1, list2):
+    final = []
+    result={}
+    for i in list1:
+        final.extend(i)
+    for i in list2:
+        if i not in final:
+            result[i] = False
+        else:
+            result [i] = True
+    return result
+      
+list1 = [[2, 3, 1], [4, 5], [6,7,8]]
+list2 = [11,4, 5, 6, 7, 8]
+
+xTakenDict = (checkSubset(list1,list2))
+
+print(xTakenDict)
+for i in xTakenDict:
+  print(xTakenDict[i])
+  if xTakenDict[i] == True:
+    if i > 1:
+      if (xTakenDict[i] and xTakenDict[i+1] and xTakenDict[i-1])== True:
+        print("X won")
+  else:
+    pass
+  
 # Game Start 
   await ctx.send("Initiated TicTacToe")
   num = random.randint(1, 2)
@@ -504,6 +534,7 @@ async def ttt(ctx, p2: discord.Member):
   else:
     await ctx.send("Game Ended. _____ Won")
 
+    
 
 
 
