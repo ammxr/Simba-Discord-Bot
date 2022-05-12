@@ -1,0 +1,6 @@
+Will use JSON Objects to compare with taken tiles 
+{
+    "tile1": "",
+    "tile2": "",
+    "tile3": ""
+}
