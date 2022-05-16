@@ -6,6 +6,8 @@ import re
 import random
 import asyncio
 import aiohttp
+import os.path
+from os import path
 from PIL import Image
 from io import BytesIO
 from PIL import ImageFont
@@ -392,10 +394,13 @@ async def ttt(ctx, p2: discord.Member):
   player1 = p1
   player2 = p2
 
-  async def tttGrid(tileChosen):
+  async def tttGrid(tileChosen, player):
     embed = discord.Embed(title="TicTacToe | Simmy Bot", description=f"Here is your grid:", color = 0x709198)
     embed.set_footer(text=f"Game initiated by<@" + str(player1.id) + ">")
-    tttBase = Image.open ("TicTacToe/defaultGridTTT.jpg")
+    if path.exists("TicTacToe/tttGameCompiled.png"):
+      tttBase = Image.open ("TicTacToe/tttGameCompiled.png")
+    else:
+      tttBase = Image.open ("TicTacToe/defaultGridTTT.jpg")
     tttBase = tttBase.convert("RGBA")
     tttX = Image.open('TicTacToe/x.png')
     tttX = tttX.convert("RGBA")
@@ -406,7 +411,6 @@ async def ttt(ctx, p2: discord.Member):
     file = discord.File("TicTacToe/tttGameCompiled.png", filename="tttGameCompiled.png")
     embed.set_image(url="attachment://tttGameCompiled.png")
     await ctx.send(file=file, embed=embed)
-    
 
   await ctx.send("Initiated TicTacToe")
   #num = random.randint(1, 2)
@@ -438,7 +442,6 @@ async def ttt(ctx, p2: discord.Member):
         tie=True
       elif tileChosenListX in squaresTakenList:
         await ctx.send("Tile already chosen: GAME OVER")
- 
       if tie==False:
         for i in range(len(tttWinningScenarios)):
           if (tttWinningScenarios[i][0] in tileChosenListX and tttWinningScenarios[i][1] in tileChosenListX and tttWinningScenarios[i][2] in tileChosenListX):
@@ -448,11 +451,7 @@ async def ttt(ctx, p2: discord.Member):
             winner=("Player 2")
             gameOver=True
   await ctx.send("Game Ended. "+ winner +" Won")
-
-
-
-
-
+  os.remove("TicTacToe/tttGameCompiled.png")
 
 
 #ADDONS ---------------------------------------------
@@ -465,5 +464,4 @@ async def whoisthelegendarycreatorofthisloduinsanebot(ctx):
 
 
 #BOT RUN---------------------------------------------
-#bot.run("ODExMjk1NjAxOTAzMTQwOTg1.YCwH6A.FHg_psLmYpEhP00qw8AGgZAUSaE")
-bot.run("ODExMjk1NjAxOTAzMTQwOTg1.YCwH6A.gqzDAu4oK0QMhzFWWCXoY-GGPyc")
+bot.run(TOKEN)
