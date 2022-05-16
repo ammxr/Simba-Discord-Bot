@@ -402,10 +402,13 @@ async def ttt(ctx, p2: discord.Member):
     else:
       tttBase = Image.open ("TicTacToe/defaultGridTTT.jpg")
     tttBase = tttBase.convert("RGBA")
-    tttX = Image.open('TicTacToe/x.png')
-    tttX = tttX.convert("RGBA")
+    if player == player1:
+      tttPlotPoint = Image.open('TicTacToe/x.png')
+    else:
+      tttPlotPoint = Image.open('TicTacToe/o.png')
+    tttPlotPoint = tttPlotPoint.convert("RGBA")
     back_im = tttBase.copy()  
-    back_im.paste(tttX, (tileChosen), tttX)
+    back_im.paste(tttPlotPoint, (tileChosen), tttPlotPoint)
     back_im.save('TicTacToe/tttGameCompiled.png', quality=95)
     embed.set_image(url="attachment://TicTacToe/tttGameCompiled.png")
     file = discord.File("TicTacToe/tttGameCompiled.png", filename="tttGameCompiled.png")
@@ -413,9 +416,7 @@ async def ttt(ctx, p2: discord.Member):
     await ctx.send(file=file, embed=embed)
 
   await ctx.send("Initiated TicTacToe")
-  #num = random.randint(1, 2)
-  num=1
-
+  num = random.randint(1, 2)
   tttWinningScenarios = [
     ['tile1', 'tile2', 'tile3'],
     ['tile4', 'tile5', 'tile6'],
@@ -437,31 +438,37 @@ async def ttt(ctx, p2: discord.Member):
         tileChosen = tttPossibleTiles[player1TTTResponse.content]
         tileChosenListX.append(player1TTTResponse.content)
         squaresTakenList.append(player1TTTResponse.content)
-        await tttGrid(tileChosen)
-      elif (len(tileChosenListX)+ (len(tileChosenListO)))==9:
+        await tttGrid(tileChosen, turn)
+      elif (len(squaresTakenList))==9:
         tie=True
+        await ctx.send("TIEEE GAME OVER")
       elif tileChosenListX in squaresTakenList:
         await ctx.send("Tile already chosen: GAME OVER")
-      if tie==False:
-        for i in range(len(tttWinningScenarios)):
-          if (tttWinningScenarios[i][0] in tileChosenListX and tttWinningScenarios[i][1] in tileChosenListX and tttWinningScenarios[i][2] in tileChosenListX):
-            winner=("Player 1")
-            gameOver=True
-          elif (tttWinningScenarios[i][0] in tileChosenListO and tttWinningScenarios[i][1] in tileChosenListO and tttWinningScenarios[i][2] in tileChosenListO):
-            winner=("Player 2")
-            gameOver=True
+      num=2
+    if num == 2:
+      turn = player2
+      await ctx.send("It is <@" + str(player2.id) + ">'s turn. Please choose a tile")
+      player2TTTResponse = await bot.wait_for('message')
+      if (player2TTTResponse.content) in tttPossibleTiles:
+        tileChosen = tttPossibleTiles[player2TTTResponse.content]
+        tileChosenListO.append(player2TTTResponse.content)
+        squaresTakenList.append(player2TTTResponse.content)
+        await tttGrid(tileChosen, turn)
+      elif (len(squaresTakenList))==9:
+        tie=True
+        await ctx.send("TIEEE GAME OVER")
+      elif tileChosenListO in squaresTakenList:
+        await ctx.send("Tile already chosen: GAME OVER")
+      num=1
+    if tie==False:
+      for i in range(len(tttWinningScenarios)):
+        if (tttWinningScenarios[i][0] in tileChosenListX and tttWinningScenarios[i][1] in tileChosenListX and tttWinningScenarios[i][2] in tileChosenListX):
+          winner=("Player 1")
+          gameOver=True
+        elif (tttWinningScenarios[i][0] in tileChosenListO and tttWinningScenarios[i][1] in tileChosenListO and tttWinningScenarios[i][2] in tileChosenListO):
+          winner=("Player 2")
+          gameOver=True
   await ctx.send("Game Ended. "+ winner +" Won")
-  os.remove("TicTacToe/tttGameCompiled.png")
-
-
-#ADDONS ---------------------------------------------
-@bot.command()
-async def whatisreannesfavlabelslashsinger(ctx):
-    await ctx.send('404collective and 404 4L')
-@bot.command()
-async def whoisthelegendarycreatorofthisloduinsanebot(ctx):
-    await ctx.send('obv Spxdezzz#0024')
-
 
 #BOT RUN---------------------------------------------
 bot.run(TOKEN)
